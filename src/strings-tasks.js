@@ -515,8 +515,21 @@ function extractEmails(str) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  return str
+    .split('')
+    .map((letter) => {
+      if (letter.charCodeAt(0) >= 65 && letter.charCodeAt(0) <= 90) {
+        const newCode = ((letter.charCodeAt(0) - 65 + 13) % 26) + 65;
+        return String.fromCharCode(newCode);
+      }
+      if (letter.charCodeAt(0) >= 97 && letter.charCodeAt(0) <= 122) {
+        const newCode = ((letter.charCodeAt(0) - 97 + 13) % 26) + 97;
+        return String.fromCharCode(newCode);
+      }
+      return letter;
+    })
+    .join('');
 }
 
 /**
@@ -543,8 +556,32 @@ function encodeToRot13(/* str */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+
+function getCardId(value) {
+  const suits = ['♣', '♦', '♥', '♠'];
+  const ranks = [
+    'A',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+  ];
+
+  const rank = value.slice(0, value.length - 1);
+  const suit = value.slice(-1);
+
+  const rankIndex = ranks.indexOf(rank);
+  const suitIndex = suits.indexOf(suit);
+
+  return suitIndex * 13 + rankIndex;
 }
 
 module.exports = {
